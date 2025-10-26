@@ -140,3 +140,16 @@ table {
   white-space: nowrap;
   text-align: left;
 }
+
+details {
+  margin: 0.5rem 0;
+}
+
+details summary {
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+}
+
+details[open] summary {
+  margin-bottom: 0.75rem;
+}
