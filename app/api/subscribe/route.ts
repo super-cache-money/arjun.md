@@ -36,6 +36,8 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    console.log('New subscriber:', email);
+
     return NextResponse.json(
       { message: 'Successfully subscribed!' },
       { status: 200 }
