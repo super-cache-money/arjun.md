@@ -2,6 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Source_Serif_4 } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import Subscribe from '../components/Subscribe';
 import PageFooterContent from '../components/PageFooterContent';
 import FooterLinks from '../components/FooterLinks';
@@ -40,6 +41,7 @@ export default function RootLayout({
           <Analytics />
         </div>
       </body>
+      <GoogleAnalytics gaId="G-RETJ8CVBN5" />
     </html>
   );
 }
