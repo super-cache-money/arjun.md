@@ -29,7 +29,7 @@ export default function RootLayout({
       <body className="antialiased tracking-tight">
         <div className="min-h-screen flex flex-col justify-between pt-0 md:pt-8 p-8 dark:bg-zinc-950 bg-white text-gray-900 dark:text-zinc-200">
           <Header />
-          <main className="max-w-[90ch] mx-auto w-full space-y-6">
+          <main className="max-w-[650px] mx-auto w-full space-y-6">
             {children}
           </main>
           <Footer />
@@ -42,7 +42,7 @@ export default function RootLayout({
 
 function Header() {
   return (
-    <header className="max-w-[90ch] mx-auto w-full mt-4 md:mt-0 md:mb-0 md:fixed md:top-8 md:left-8 md:max-w-none md:w-auto">
+    <header className="max-w-[650px] mx-auto w-full mt-4 md:mt-0 md:mb-0 md:fixed md:top-8 md:left-8 md:max-w-none md:w-auto">
       <a
         href="/"
         className="inline-block text-sm text-gray-400 dark:text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200"
@@ -60,7 +60,7 @@ function Footer() {
   ];
 
   return (
-    <footer className="mt-12 max-w-[90ch] mx-auto w-full">
+    <footer className="mt-12 max-w-[650px] mx-auto w-full">
       <Subscribe />
       <div className="pt-4 ">
         <div className="flex justify-between items-center tracking-tight">
