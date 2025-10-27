@@ -12,7 +12,7 @@ import { Amplitude } from '@/lib/amplitude';
 const sourceSerif = Source_Serif_4({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://next-mdx-blog.vercel.app'),
+  metadataBase: new URL('https://arjun.md'),
   alternates: {
     canonical: '/'
   },
