@@ -36,7 +36,9 @@ export default function Subscribe() {
         setMessage(data.message || 'Successfully subscribed!');
         setEmail('');
         localStorage.setItem('subscribedAt', new Date().toISOString());
-        setIsSubscribed(true);
+        setTimeout(() => {
+          setIsSubscribed(true);
+        }, 2000);
       } else {
         setStatus('error');
         setMessage(data.error || 'Something went wrong. Please try again.');
@@ -74,7 +76,7 @@ export default function Subscribe() {
             disabled={status === 'loading' || status === 'success'}
             className="px-4 py-2 text-sm font-medium text-white bg-gray-800 dark:bg-zinc-200 dark:text-zinc-900 rounded hover:bg-gray-700 dark:hover:bg-zinc-300 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {status === 'loading' ? 'Subscribing...' : status === 'success' ? 'Subscribed!' : 'Subscribe'}
+            {status === 'loading' ? 'Subscribing...' : status === 'success' ? 'Done! 🙌' : 'Subscribe'}
           </button>
         </form>
 
