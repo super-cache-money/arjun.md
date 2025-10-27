@@ -2,6 +2,8 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Source_Serif_4 } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
+import Subscribe from '../components/Subscribe';
+import PageFooterContent from '../components/PageFooterContent';
 
 const sourceSerif = Source_Serif_4({ subsets: ['latin'] });
 
@@ -58,19 +60,25 @@ function Footer() {
   ];
 
   return (
-    <footer className="mt-12 text-center">
-      <div className="flex justify-center space-x-4 tracking-tight">
-        {links.map((link) => (
-          <a
-            key={link.name}
-            href={link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-400 dark:text-gray-500 hover:text-blue-500 transition-colors duration-200"
-          >
-            {link.name}
-          </a>
-        ))}
+    <footer className="mt-12 max-w-[90ch] mx-auto w-full">
+      <Subscribe />
+      <div className="pt-4 ">
+        <div className="flex justify-between items-center tracking-tight">
+          <div className="flex space-x-4">
+            {links.map((link) => (
+              <a
+                key={link.name}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 dark:text-gray-500 hover:text-blue-500 transition-colors duration-200"
+              >
+                {link.name}
+              </a>
+            ))}
+          </div>
+          <PageFooterContent />
+        </div>
       </div>
     </footer>
   );

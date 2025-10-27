@@ -52,9 +52,9 @@ export default function Subscribe() {
   }
 
   return (
-    <div className="mt-12 pt-8 border-t border-gray-200 dark:border-zinc-800">
+    <div className="border-t border-gray-200 dark:border-zinc-800">
       <div className="max-w-[60ch]">
-        <h3 className="text-lg font-semibold mb-2">I'll be writing and making things </h3>
+        <h3 className="text-lg font-semibold mb-2">I'll be writing and making more </h3>
         <p className="text-gray-500 dark:text-gray-400 mb-4 text-sm">
           Want to see?
         </p>
