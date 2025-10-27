@@ -40,7 +40,7 @@ export default function RootLayout({
 
 function Header() {
   return (
-    <header className="max-w-[90ch] mx-auto w-full mb-8 md:mb-0 md:fixed md:top-8 md:left-8 md:max-w-none md:w-auto">
+    <header className="max-w-[90ch] mx-auto w-full mt-4 md:mt-0 md:mb-0 md:fixed md:top-8 md:left-8 md:max-w-none md:w-auto">
       <a
         href="/"
         className="inline-block text-sm text-gray-400 dark:text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200"
@@ -53,10 +53,8 @@ function Header() {
 
 function Footer() {
   const links = [
-    { name: '@johnsmith', url: 'https://x.com/johnsmith' },
-    { name: 'youtube', url: 'https://www.youtube.com/@johnsmith' },
-    { name: 'linkedin', url: 'https://www.linkedin.com/in/johnsmith' },
-    { name: 'github', url: 'https://github.com/johnsmith' }
+    { name: 'github', url: 'https://github.com/supercachemoney' },
+    { name: 'linkedin', url: 'https://www.linkedin.com/in/arjunkhoosal' },
   ];
 
   return (
