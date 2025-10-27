@@ -153,3 +153,22 @@ details summary {
 details[open] summary {
   margin-bottom: 0.75rem;
 }
+
+a {
+  color: rgb(156 163 175); /* gray-400 */
+  transition: color 200ms;
+}
+
+a:hover {
+  color: rgb(59 130 246); /* blue-500 */
+}
+
+@media (prefers-color-scheme: dark) {
+  a {
+    color: rgb(107 114 128); /* gray-500 */
+  }
+
+  a:hover {
+    color: rgb(96 165 250); /* blue-400 */
+  }
+}

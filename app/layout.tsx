@@ -26,6 +26,7 @@ export default function RootLayout({
     <html lang="en" className={`${sourceSerif.className}`}>
       <body className="antialiased tracking-tight">
         <div className="min-h-screen flex flex-col justify-between pt-0 md:pt-8 p-8 dark:bg-zinc-950 bg-white text-gray-900 dark:text-zinc-200">
+          <Header />
           <main className="max-w-[90ch] mx-auto w-full space-y-6">
             {children}
           </main>
@@ -34,6 +35,19 @@ export default function RootLayout({
         </div>
       </body>
     </html>
+  );
+}
+
+function Header() {
+  return (
+    <header className="max-w-[90ch] mx-auto w-full mb-8 md:mb-0 md:fixed md:top-8 md:left-8 md:max-w-none md:w-auto">
+      <a
+        href="/"
+        className="inline-block text-sm text-gray-400 dark:text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200"
+      >
+        arjun.md
+      </a>
+    </header>
   );
 }
 
