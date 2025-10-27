@@ -20,7 +20,20 @@ export const metadata: Metadata = {
     default: 'Arjun Khoosal',
     template: '%s | Arjun Khoosal'
   },
-  description: 'My portfolio, blog, and personal website.'
+  description: 'Arjun\'s website :)',
+  icons: {
+    icon: [
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' }
+    ],
+    apple: '/apple-touch-icon.png',
+    other: [
+      {
+        rel: 'manifest',
+        url: '/site.webmanifest'
+      }
+    ]
+  }
 };
 
 export default function RootLayout({
