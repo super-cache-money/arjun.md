@@ -5,6 +5,8 @@ import { Analytics } from '@vercel/analytics/react';
 import Subscribe from '../components/Subscribe';
 import PageFooterContent from '../components/PageFooterContent';
 import FooterLinks from '../components/FooterLinks';
+import { Amplitude } from '@/lib/amplitude';
+
 
 const sourceSerif = Source_Serif_4({ subsets: ['latin'] });
 
@@ -27,6 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${sourceSerif.className}`}>
+      <Amplitude />
       <body className="antialiased tracking-tight">
         <div className="min-h-screen flex flex-col justify-between pt-0 md:pt-8 p-8 dark:bg-zinc-950 bg-white text-gray-900 dark:text-zinc-200">
           <Header />

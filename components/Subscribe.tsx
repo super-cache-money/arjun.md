@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import amplitude from '@/lib/amplitude';
 
 export default function Subscribe() {
   const [email, setEmail] = useState('');
@@ -35,6 +36,7 @@ export default function Subscribe() {
         setStatus('success');
         setMessage(data.message || 'Successfully subscribed!');
         setEmail('');
+        amplitude.track('Sign Up');
         localStorage.setItem('subscribedAt', new Date().toISOString());
         setTimeout(() => {
           setIsSubscribed(true);
