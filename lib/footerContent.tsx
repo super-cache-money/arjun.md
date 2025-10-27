@@ -1,8 +1,8 @@
 export const footerContent: Record<string, React.ReactNode> = {
   '/': (
     <>
-      Image from{' '}
-      <a href="https://www.cfr.org/blog/south-africas-unemployment-grows">here</a>
+      Image above {' '}
+      <a href="https://www.cfr.org/blog/south-africas-unemployment-grows">source</a>
     </>
   ),
   // Add more pages here as needed
