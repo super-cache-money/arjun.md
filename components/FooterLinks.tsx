@@ -7,7 +7,7 @@ export default function FooterLinks() {
 
   const allLinks = [
     { name: 'about me', url: '/', external: false },
-    { name: 'github', url: 'https://github.com/supercachemoney', external: true },
+    { name: 'github', url: 'https://github.com/super-cache-money', external: true },
     { name: 'linkedin', url: 'https://www.linkedin.com/in/arjunkhoosal', external: true },
   ];
 
