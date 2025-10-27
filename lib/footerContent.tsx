@@ -1,7 +1,7 @@
 export const footerContent: Record<string, React.ReactNode> = {
   '/': (
     <>
-      Image above {' '}
+      Image above's {' '}
       <a href="https://www.cfr.org/blog/south-africas-unemployment-grows">source</a>
     </>
   ),
