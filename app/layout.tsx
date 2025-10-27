@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     canonical: '/'
   },
   title: {
-    default: 'Arjun Khoosal',
+    default: 'A thing by Arjun Khoosal',
     template: '%s | Arjun Khoosal'
   },
   description: 'Arjun\'s website :)',
