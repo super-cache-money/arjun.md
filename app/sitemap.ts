@@ -21,18 +21,19 @@ async function getNoteSlugs(dir: string) {
 }
 
 export default async function sitemap() {
-  const notesDirectory = path.join(process.cwd(), 'app', 'n');
-  const slugs = await getNoteSlugs(notesDirectory);
+  const pagesDirectory = path.join(process.cwd(), 'app');
+  const slugs = await getNoteSlugs(pagesDirectory);
 
-  const notes = slugs.map((slug) => ({
-    url: `${SITE_URL}/n/${slug}`,
+  const pages = slugs.map((slug) => ({
+    url: `${SITE_URL}/${slug}`,
     lastModified: new Date().toISOString()
   }));
 
-  const routes = ['', '/work'].map((route) => ({
+  const routes = [''].map((route) => ({
     url: `${SITE_URL}${route}`,
     lastModified: new Date().toISOString()
   }));
 
-  return [...routes, ...notes];
+  const cleanedPages = pages.filter((page) => page.url !== `${SITE_URL}/.`);
+  return [...cleanedPages, ...routes];
 }
