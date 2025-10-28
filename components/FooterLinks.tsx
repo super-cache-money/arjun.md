@@ -27,7 +27,7 @@ export default function FooterLinks() {
           key={link.name}
           href={link.url}
           {...(link.external && { target: '_blank', rel: 'noopener noreferrer' })}
-          className="text-gray-400 dark:text-gray-500 hover:text-blue-500 transition-colors duration-200"
+          className="hover:text-blue-500 transition-colors duration-200"
         >
           {link.name}
         </a>
