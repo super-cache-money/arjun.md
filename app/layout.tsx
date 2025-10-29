@@ -1,15 +1,11 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Source_Serif_4 } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import Subscribe from '../components/Subscribe';
 import PageFooterContent from '../components/PageFooterContent';
 import FooterLinks from '../components/FooterLinks';
 import { Amplitude } from '@/lib/amplitude';
-
-
-const sourceSerif = Source_Serif_4({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://arjun.md'),
@@ -42,7 +38,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${sourceSerif.className}`}>
+    <html lang="en">
       <Amplitude />
       <body className="antialiased tracking-tight">
         <div className="min-h-screen flex flex-col justify-between pt-0 md:pt-8 p-8 dark:bg-zinc-950 bg-white text-gray-900 dark:text-zinc-200">

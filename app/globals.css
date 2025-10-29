@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 @theme {
-  --font-family-sans: 'Source Serif 4', serif;
+  --font-family-sans: 'Iowan Old Style', 'Palatino Linotype', 'URW Palladio L', P052, serif;
 }
 
 :root {
@@ -23,6 +23,7 @@ html {
 body {
   text-rendering: optimizeLegibility;
   font-size: 15px;
+  font-family: 'Iowan Old Style', 'Palatino Linotype', 'URW Palladio L', P052, serif;
 }
 
 strong, b {
