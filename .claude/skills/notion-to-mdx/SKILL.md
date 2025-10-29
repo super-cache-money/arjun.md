@@ -1,13 +1,13 @@
 ---
 name: notion-to-mdx
-description: Automatically converts Notion markdown exports to Next.js MDX format with proper metadata and formatting. Use this skill when working with Notion markdown files that need to be converted to page.mdx files in this Next.js repository. Handles title extraction, strikethrough conversion, and interactive dropdown creation.
+description: Automatically converts Notion markdown exports to Next.js MDX format with proper metadata and formatting. Use this skill when working with Notion markdown files that need to be converted to page.mdx files in this Next.js repository. Handles title extraction, interactive dropdown creation, and automatic image downloading from Notion.
 ---
 
 # Notion to MDX Converter
 
 ## Overview
 
-This skill automates the conversion of Notion markdown exports into Next.js MDX-compatible format for this repository. It handles metadata extraction, formatting transformations, and interactive conversion of expandable sections.
+This skill automates the conversion of Notion markdown exports into Next.js MDX-compatible format for this repository. It handles metadata extraction, formatting transformations, interactive conversion of expandable sections, and automatic downloading of images from Notion.
 
 ## When to Use This Skill
 
@@ -31,17 +31,25 @@ When a user requests conversion of Notion markdown, identify the target file:
 Execute the conversion script with the appropriate file path:
 
 ```bash
-python .claude/skills/notion-to-mdx/scripts/convert_notion_to_mdx.py <input_file> [output_file]
+python .claude/skills/notion-to-mdx/scripts/convert_notion_to_mdx.py <input_file> [output_file] [--page-id PAGE_ID]
 ```
 
 **Parameters:**
 - `<input_file>`: Path to the Notion markdown file (required)
 - `[output_file]`: Optional output path (defaults to overwriting input file)
+- `--page-id PAGE_ID`: Optional Notion page ID for downloading images
+
+**Image Downloading:**
+If `--page-id` is provided and `NOTION_API_KEY` is found in `.env.local`, the script will:
+- Detect Notion image attachments (format: `![text](attachment:UUID:filename)`)
+- Download images from Notion using the API
+- Save images to `public/images/from-notion/` using the attachment ID as the filename
+- Update markdown references to point to local files
 
 **The script will:**
-1. Extract the title from the first top-level heading (`# Title`)
-2. Add MDX frontmatter with the title metadata
-3. Convert all `~~strikethrough~~` syntax to `<del>strikethrough</del>` HTML tags
+1. Download Notion images (if page ID provided)
+2. Extract the title from the first top-level heading (`# Title`)
+3. Add MDX frontmatter with the title metadata
 4. Identify bullet list sections and interactively prompt about expandable dropdowns
 
 ### Step 3: Interactive Dropdown Conversion
@@ -79,8 +87,8 @@ The script then converts the bullet list to:
 
 After conversion, review the generated MDX file to ensure:
 - Title metadata is correct in the frontmatter
-- All strikethrough text is properly converted
 - Expandable dropdowns are correctly formatted
+- Images are downloaded to `public/images/` and references are updated
 - File structure matches Next.js MDX requirements
 
 ## Conversion Details
@@ -109,15 +117,6 @@ Content here...
 
 If no top-level heading is found, defaults to "Untitled".
 
-### Strikethrough Conversion
-
-Notion's markdown strikethrough syntax is automatically converted:
-
-**Before:** `This is ~~deleted~~ text`
-**After:** `This is <del>deleted</del> text`
-
-This ensures compatibility with Next.js MDX rendering.
-
 ### Expandable Dropdowns
 
 Regular bullet lists in Notion exports appear as standard markdown bullets. The script identifies these sections and allows interactive conversion to HTML `<details>` elements:
@@ -140,16 +139,60 @@ Regular bullet lists in Notion exports appear as standard markdown bullets. The 
 </details>
 ```
 
+### Image Downloading
+
+When a Notion page ID is provided via `--page-id`, the script automatically downloads images embedded in the Notion export.
+
+**How it works:**
+1. Script scans the markdown for Notion image attachments: `![alt](attachment:UUID:filename)`
+2. Extracts the attachment IDs from the markdown
+3. Fetches blocks from the Notion page using the API
+4. Matches attachment IDs to find signed S3 URLs
+5. Downloads images to `public/images/from-notion/`
+6. Uses the attachment ID as the filename (keeping original extension)
+7. Updates markdown references to point to local files
+
+**Before (Notion attachment):**
+```markdown
+![image.png](attachment:6e9315e9-4f0f-4fec-82d9-28ef74260e5f:image.png)
+```
+
+**After (local reference):**
+```markdown
+![image.png](/public/images/from-notion/6e9315e9-4f0f-4fec-82d9-28ef74260e5f.png)
+```
+
+**Requirements:**
+- Notion page must be shared with the integration (API key owner)
+- `NOTION_API_KEY` must be present in `.env.local`
+- Page ID can be extracted from Notion URL: `notion.site/Page-Title-{PAGE_ID}`
+
+**Note:** The script automatically searches for `.env.local` starting from the input file's directory up to the repository root.
+
 ## Example Usage
 
-**User request:** "Convert the Notion markdown in app/my-post/page.mdx"
+**User request:** "Convert the Notion markdown in app/my-post/page.mdx and download the images"
 
 **Actions:**
-1. Run: `python .claude/skills/notion-to-mdx/scripts/convert_notion_to_mdx.py app/my-post/page.mdx`
-2. Script extracts title, converts strikethrough automatically
-3. Script prompts user about bullet list sections for dropdown conversion
+1. Extract page ID from Notion URL (e.g., `1f82e4fe580280a29479cba5d8ffa898`)
+2. Run: `python .claude/skills/notion-to-mdx/scripts/convert_notion_to_mdx.py app/my-post/page.mdx --page-id 1f82e4fe580280a29479cba5d8ffa898`
+3. Script automatically:
+   - Finds `NOTION_API_KEY` in `.env.local`
+   - Downloads images from Notion
+   - Extracts title
+   - Prompts user about bullet list sections for dropdown conversion
 4. User responds to prompts interactively
-5. File is updated with converted content
+5. File is updated with converted content and local image references
+
+**Example without images:**
+```bash
+python .claude/skills/notion-to-mdx/scripts/convert_notion_to_mdx.py app/my-post/page.mdx
+```
+
+**Example with images:**
+```bash
+python .claude/skills/notion-to-mdx/scripts/convert_notion_to_mdx.py app/my-post/page.mdx --page-id 1f82e4fe580280a29479cba5d8ffa898
+```
 
 ## Non-Interactive Mode
 
@@ -159,16 +202,19 @@ To skip the interactive dropdown prompts (useful when no dropdowns are needed), 
 convert_notion_to_mdx(input_path, output_path, interactive=False)
 ```
 
-This will perform title extraction and strikethrough conversion only.
+This will perform title extraction only.
 
 ## Resources
 
 ### scripts/convert_notion_to_mdx.py
 
 Python script that performs the markdown-to-MDX conversion. Handles:
+- Notion image downloading via API
 - Title extraction from top-level headings
 - MDX frontmatter generation
-- Strikethrough syntax conversion
 - Interactive dropdown creation with user prompts
+- Automatic `.env.local` discovery for API credentials
+
+**Dependencies:** `requests` library for HTTP requests to Notion API
 
 The script can be executed directly from the command line or imported as a Python module for programmatic use.

@@ -1,6 +1,9 @@
 import type { NextConfig } from 'next';
 import createMDX from '@next/mdx';
 import postgres from 'postgres';
+import remarkGfm from 'remark-gfm';
+import remarkFrontmatter from 'remark-frontmatter';
+import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
 
 export const sql = postgres(process.env.POSTGRES_URL!, {
   ssl: 'allow'
@@ -23,15 +26,17 @@ const nextConfig: NextConfig = {
       destination,
       permanent: !!permanent
     }));
-  },
-  // Note: Using the Rust compiler means we cannot use
-  // rehype or remark plugins. If you need them, remove
-  // the `experimental.mdxRs` flag.
-  experimental: {
-    mdxRs: true
   }
 };
 
-const withMDX = createMDX({});
+const withMDX = createMDX({
+  options: {
+    remarkPlugins: [
+      remarkGfm,
+      remarkFrontmatter,
+      [remarkMdxFrontmatter, { name: 'metadata' }]
+    ]
+  }
+});
 
 export default withMDX(nextConfig);
