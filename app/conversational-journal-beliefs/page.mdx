@@ -1,0 +1,267 @@
+# Why I believe I should make the Conversational Journal
+
+## Belief #1: If you could fit *absolutely everything* into a ChatGPT prompt, that would be a super power. We need to find better ways of fitting context into LLMs.
+
+I seem to share this belief with Sam, who said this last week (watch the clip):
+
+https://x.com/Overlap_Tech/status/1922696722956120408
+
+### **Models have become so much smarter**
+
+GPT 4.5 has ~50x more parameters (very loosely - neurons) than GPT 3 - which means the extent to which it is able to remember and make sense of the full breadth of the internet has multiplied. In this respect its well and truly superhuman. 
+
+### But we only use them for a tiny subset of our work
+
+For most work, and for most questions - getting the help of LLMs is more trouble than its worth. Why does it take so long to put together a good prompt? Even after that, why does it take so many back and forths? And then even after that - why do we so often discard the output of the LLM and just do it ourselves?
+
+A big reason here is that we have to manually curate the context we give the model. That’s a lot of what prompt engineering is - very manual and precise context curation. 
+
+### Context management is a fundamental problem
+
+When we think to ourselves, or even when we express a question to a close friend or colleague, they often have a better sense of what we’re asking than ChatGPT. **The LLM knows wikipedia back to front, but it has very little overlap with all the context in your brain.** It doesn’t know what you had for breakfast today. That seems like useless information, but there are many useful questions you might have, for which its useful context (e.g. What’s the easiest way for me to lose weight? My stomach is sore, what medication should I take? etc).
+
+So when we open the chatgpt prompt, we have to do a lot of thinking to put *all* the relevant factoids on a platter. We’ll always fail to do so, it’s just a matter of extent. 
+
+### Retrieval augmented generation is just OK
+
+Of course, we have made some progress automating this. Where that information sits in some digital form, for e.g. in your companies’ project management tool, and you ask “What is this company struggling with at the moment”, the project management can go off and pull out the top 10 documents most relevant to the topic of struggles, and attach that into the prompt with your question. We call this retrieval augmented generation. 
+
+In many (most?) instances, this naive form of RAG doesn’t give us the context we need or the answer we want, because the top-ten approach does not pull in the more implicitly useful context. For example - maybe one struggle is that 70% of all completed pieces of work have one persons name beside them. This can’t be found in any particular document.
+
+### The kitchen sink approach to context management seems more promising
+
+What if you just uploaded every single company document to the context window? With the recent explosion in context window sizes - it’s possible. GPT 4.5 has a context window of 128k, up from 2k for GPT 3. Gemini has a *2 million token* context window (it can fit Lord of the Rings 3 times over, or about 10k of emails).
+
+I like how it’s put [in this really cool essay](https://thelongcontext.com/), by the notebook LM guy:
+
+> *“What’s remarkable about a long-context model is not that it can find a metaphoric needle hidden in a pile of straw. What’s remarkable is that it can see the entire haystack.”*
+> 
+
+He is an author.
+
+> At any given moment in time, my own knowledge and recall of the full text of a book I’ve written is much more like a blurry JPEG than an exact reproduction.
+> 
+
+But the 2M context window, he writes, allows the model to have “a high-resolution snapshot” that it can reason about.
+
+But - as Sam acknowledges - we’ll never get there. 
+
+### But in practice, long context is slow, expensive, and causes reasoning deterioration
+
+Ultimately, attention is finite in a neural network of a given size. The more context we spread it over, the more signal we miss. For example, with long context, [LLM performance drops when the “needles” are near the middle, vs the beginning and end](https://arize.com/blog/lost-in-the-middle-how-language-models-use-long-contexts-paper-reading/#:~:text=This%20paper%20examines%20how%20well,context%20models). 
+
+When the needles are not obvious, and some inference is required, [a benchmark](https://arxiv.org/abs/2502.05167#:~:text=While%20they%20perform%20well%20in,perfect%20baseline) has GPT 4o’s effectiveness dropping off at 32k to 70%, all the way from 99%, as you can see here:
+
+![image.png](attachment:6e9315e9-4f0f-4fec-82d9-28ef74260e5f:image.png)
+
+If you’re interested - you can watch [this guy](https://www.youtube.com/watch?v=NHMJ9mqKeMQ) from google talking about how hard it is, or check [this deep research rebuttal](https://chatgpt.com/share/682b57cf-2664-8001-b08a-4daee1882a5a) to the notebook LM guy.
+
+With respect to cost - the journal itself is a good example.
+
+I currently dump my entire journal into chatgpt 4.5 - and it costs about R80 for each day’s journalling! GPT4.5 is by itself admittedly is crazy expensive, but after testing it a lot, it definitely generates the best questions (which I am kind of obsessed with, as you’ll see later). By hacking the context, I would bet it’s possible to optimise this cost by 10x. It might even improve output quality. 
+
+### It’s possible and important for us to find better ways of refining context
+
+Here’s one that shows some promise: summarisation. 
+
+In the most naive sense (used by ChatGPT today, for example) - it’s summarising the old stuff, and condensing away those tokens.
+
+There are more interesting types of summarisation that we can apply - especially to something as structured and repetitive as journal entries! There’s a clear data structure that we can incrementally summarise on top of, every day. We can take the previous summary of “you” (which might look like something like therapists notes) from all previous entries, put today’s new entry beside that, and ask the LLM to update the running summary based on today’s entry. 
+
+Perhaps we track and count feelings, and the development of relationships with characters in your life. We log important events. We identify and count patterns of thought or behaviour. Maybe all these kinds entities are linked. Maybe the summaries cite various journal entries, like wikipedia, which can be retrieved algorithmically.
+
+Yeah - I think there are some interesting ways to condense a journal into a really token-efficient representation. [This paper](https://arxiv.org/html/2407.15021v1#A8.F6) shows structured, incremental summarisation boosts recall by about 30%, over one-shot summaries of long things
+
+[Here](http://getzep.com/)’s another approach that stores context in a time-based graph, and [here](https://arxiv.org/abs/2310.08560)’s another that uses OS-like virtual context windows, to create “infinite context".
+
+> "In a long-context world, maybe the organizations that benefit from AI will not be the ones with the most powerful models, but rather the ones with the most artfully curated context.
+…
+No doubt there are thousands of curation strategies to discover, if that near future does indeed come to pass. And if it does, it will suggest one more point of continuity between the human mind and a long-context model. What matters most is what you put into it.”
+
+*- Our notebook LM guy, once again*
+> 
+
+Yeah - journalling seems like it’ll be close to the forefront wrt context hacking. 
+
+## Belief #2: It feels weird allowing developers to read *absolutely everything* you give LLMs. We need better privacy tools.
+
+Given these 3 things:
+
+- With AI tools, people are coding much faster. People who can’t even code are coding! A one man show can stand up an entire app. Great!
+- The most popular thing being made today seems to be: LLM wrappers. Great! (Yeah, I think this is a good thing. They may not have moats, but they bring LLMs closer to people’s problems [make me a logo!]. And people need this - many are still figuring out how to google. So we shouldn’t expect them all to become prompt engineers any time soon)
+- In order to get the most out of LLMs, users need to share *absolutely everything* (as established)
+
+So we are now expecting users to hand over *absolutely everything* to some random developer on the other side of the world.
+
+Like me, making this journalling app. But of course - it’s not just me.
+
+But I think this problem is quite solvable. I think we are close to enabling wrappers to prove that they can’t read your data, even though it’s all being passed to an LLM downstream. 
+
+Here’s what each part of the stack needs to prove (and how readily provable it is today)
+
+### **The front end must prove sensitive data is not being sent anywhere suspicious** 
+[](https://www.notion.so/It-s-way-too-hard-to-prove-you-re-a-good-guy-1d22e4fe5802800bb674d1cc1b8f7471?pvs=21)
+
+The easy lift here is to open source the part of your code that handles sensitive data, and to minimise the amount of sensitive data that is sent anywhere unencrypted (including the apps own APIs!). This doesn’t seem provable to the same extent in a native app.
+
+There is a more interesting approach, that keeps more of your code proprietary, that I couldn’t quite get all the way with. 
+
+- Technical explanation of where I got with that approach
+    
+    The approach is to transparently tag data as sensitive, and have the infrastructure to prove which endpoints that sensitive data is being sent to. Then one would only open source that, and not the entire front end. 
+    
+    While it’s quite possible to securely inspect all outgoing requests (as you can see below), we can’t robustly evaluate whether any contain sensitive data. A string `search()` doesn’t cut it, and data flow tools (static or dynamic) don’t get us all the way. This is because sensitive data can be transformed (or encrypted), `eval` exists, data can be washed through the DOM. 
+    
+    Inspecting and locking down outgoing requests looks would look like this:
+    
+    - Use a javascript `proxy` , to intercept all XHR or fetch requests.
+    - Disallow modification of the proxied functions
+    
+    For example:
+    
+    ```jsx
+    (function () {
+      const realFetch = window.fetch.bind(window);
+    
+      function screenRequest(input, init) {
+        // Extract headers
+        const headers = init?.headers || {};
+    
+        // Extract body
+        const body = init?.body;
+    
+        // TODO: The hard part - actually screen for data
+      }
+    
+      async function secureFetch(input, init = {}) {
+        screenRequest(input, init);
+        return realFetch(input, init);
+      }
+    
+      Object.defineProperty(window, 'fetch', {
+        value: Object.freeze(secureFetch),
+        writable: false,
+        configurable: false,
+        enumerable: true,
+      });
+    })();
+    ```
+    
+
+### **The endpoints receiving sensitive data must prove they aren’t suspicious**
+
+Today, you can simply open source certain endpoints that handle sensitive data (like those that invoke LLM API’s with app-level credentials), and optimise for those endpoints doing as little as possible, so you can keep the rest proprietary.
+
+But that’s not sufficient proof. What if your server is your server is logging everything before it hits the endpoint? What if the endpoint isn’t even running that code?
+
+Vercel and other platform-as-a-service offerings exist to make everything easy - and that should include brokering trust, which is actually quite easy for them to do. If vercel exposed a hash of the actually -running code on the server, via an optional header on each request, that would give app makers the machinery to complete the proof. I was quite surprised they don’t already do this.
+
+### **The LLMs themselves must prove they won’t train on or leak data**
+
+Most people that don’t own tinfoil hats kinda trust that big tech having access to their secrets probably won’t end in disaster, and so if we get enough value, we’ll give our data to them. This is why we give google access to all our email. 
+
+So when OpenAI says they won’t train on your data - and you know that half the ~~world~~ online populace is already giving them data - you tend to subscribe.
+
+The need for this trust will hopefully be alleviated someday. People are working on LLMs that can actually run on encrypted tokens. Big tech is working on proving out how secure [their LLM enclaves](https://security.apple.com/blog/private-cloud-compute/) actually are. 
+
+But for now this is not a material trust bottleneck (to my app, I believe).
+
+### Of course, I’d like to implement this in my journalling app
+
+<aside>
+⚠️
+
+Trigger warning: A bit technical
+
+</aside>
+
+I’d create a root key from a user’s pin (that is provably never sent to the server, and must be entered every time the journal is opened), and use that to derive row-level symmetric keys for all sensitive data, which may be passed to trusted server endpoints in the rare instance that server needs to be able to perform some background job (like summarisation!) and save the data to the DB. 
+
+All endpoints that handle sensitive data in that way (i.e. background summarisers, or functions that actually call the LLM) are open sourced. But - there is a closed source part of the API too.
+
+Then, finally, my last plan is to lobby vercel and cloudflare to provide the running-code hash (probably via hackernews).
+
+Of course, this would go over most user’s heads (just like SSL does). The plan is to make it clear during onboarding that:
+
+- the pin scrambles the journal (you can actually see 🔒 in place of encrypted fields, before you enter your pin every time)
+- we can’t see or recover your pin (or your journal) - so click here to email it to yourself.
+- this app uses cutting edge privacy tech that the technical community likes (click here to see more)
+
+## Belief #3: Asking yourself good questions is probably the most important lever for you to have better days, more often
+
+My favourite feeling, is the feeling of really believing I am on track.This feeling has two requirements. 
+
+First, I need to have prioritised execution over instant gratification. I need to be moving quickly. 
+
+But to sprint down the wrong path is to burn out - so I also need to believe I’m on an efficiently devised path to all my objectives. 
+
+Devising the correct path is hard. To get to our desired outcomes (which themselves shift), we must navigate an ever shifting internal world, interacting with an ever shifting external world - continually course correcting as we go. Sometimes the way is not known - and we need to experiment with different approaches. 
+
+When our selected path is invalidated, our failure modes are to pretend, to hope, or to dispair, instead of doing the work of course correcting. 
+
+Getting back on the track requires **good questions**, asked opportunely, and answered thoughtfully. This is what we pay therapists for, and it’s also the fruit of our closest relationships. But - in the ideal - this kind of sense making and direction setting needs to happen more frequently than the questions from these channels afford.
+
+Ideally, you start each day having integrated any recent shifts or setbacks, with a crystal clear sense of what you need to do, and how that’s going to carry you to your objectives. You’re on track, baby.
+
+## Belief #4: LLMs are really good at asking good questions
+
+We tend to turn to LLM’s for answers, and so they’ve been fine-tuned to rush towards them by default.
+
+Even outside of journalling - you should try asking the LLM to *ask you* questions, even if it’s just to help it build context for a more useful answer down the line.
+
+But yeah - it’s good at taking all your journal entries and your thoughts, and asking questions. 
+
+You might be missing some context, but I’ll try to demonstrate it here:
+
+[An example journalling session (best viewed on a computer)](https://www.notion.so/An-example-journalling-session-best-viewed-on-a-computer-1fa2e4fe580280c7a55ce8e8cddfb72f?pvs=21)
+
+# What gave me cold feet (and why I’m still doing it anyways)
+
+Of course, there are many other ways I can apply myself and this is quite a big solo commitment.
+
+### **I’m not sure how much other work I’ll have to do in this period**
+
+Laying the public gauntlet for to produce this output in 12 weeks, when I have a poor sense of what I can input, feels scary. 
+
+Here’s an exerpt from my journal:
+
+> *Assistant:*
+****How will you communicate with your "little community" if life circumstances (such as new work commitments or unexpected events) genuinely disrupt the plan you've laid out? 
+*User:*
+I'll just tell them, I can just email them and say hey listen this happened, I'm stopping. Oh hey, this happened, like, I'm not doing this for a week. Oh, sorry for missing last week. Yeah. I mean, that doesn't seem that scary.
+> 
+
+### **I definitely don’t want to start another whole company by myself.**
+
+I don’t really have a post-beta plan. But…to be honest, even if I’m the only one who uses my journal, I still have this:
+
+> *Assistant:*
+You mentioned feeling proud about self-righting after your wobbles and validating that your "machinery" works. Reflecting on your past entries, you've identified disruptions and resets as crucial leverage points. What specific parts of your current "machinery" do you think were most effective in helping you self-right, and how might you reinforce these further today?
+> 
+> 
+> *User:*
+> I actually think the journal lol. I really do actually think that. The sacred anchor. And the thing i need to do is to make it. Isn’t that a beautiful thing!
+> 
+
+Also - I feel like the journal is a special case of the general AI problem we’re all marching towards - with many relevant subproblems. I sometimes read a recent paper, or a hackernews post, and think - “ah, that’s exactly what I was thinking of doing!”. It’s a cool feeling and it’s validating that I’m close to the frontier. I want to get even closer 👀.
+
+### **There are already some pretty good competing products**
+
+Big incumbents (e.g. Day One with 1M+ Downloads) have all implemented conversational journalling as a feature (alongside a whole bunch of other stuff). And there’s a new one (Rosebud) that’s a couple years old, founded by a couple engineers, that is uncannily close to my vision! It has $1M ARR with basically just the founders (10k+ downloads)
+
+Competitively, I believe there might be a space for mine, because:
+
+- ⁠The market is big, as validated by the Big Incumbents.
+- ⁠⁠I have one big feature that the New One doesn’t - privacy. I also think I might be able to find 2 more (Better AI context management, better integration with therapists and using them as a sales channel)
+- ⁠⁠I feel their brand has no personality - and I’m not inclined to brand minimalism here. Also, it might be possible to win at growth here, they are also early and don’t have a proper growth person
+
+You can read more about the competitors [**here](https://www.notion.so/Conversational-Journal-Competitor-analysis-1e12e4fe580280ebb70ecc801f0f64f7?pvs=21).**
+
+<aside>
+🎁
+
+If you got this far, and somehow still have stamina remaining, there is more:
+
+- [**Beta scope & timelines**](https://www.notion.so/Beta-Launch-Plan-for-the-Conversational-Journal-1ee2e4fe580280899b1fe15ed228ad9a?pvs=21)
+- [**H](https://www.notion.so/Beta-Launch-Plan-for-the-Conversational-Journal-1ee2e4fe580280899b1fe15ed228ad9a?pvs=21)[igh level technical approach](https://www.notion.so/High-Level-Technical-Approach-for-Conversational-Journal-1f72e4fe580280908ab4fe512d6172b9?pvs=21)**
+</aside>
