@@ -175,9 +175,7 @@ But for now this is not a material trust bottleneck (to my app, I believe).
 
 <aside>
 ⚠️
-
 Trigger warning: A bit technical
-
 </aside>
 
 I’d create a root key from a user’s pin (that is provably never sent to the server, and must be entered every time the journal is opened), and use that to derive row-level symmetric keys for all sensitive data, which may be passed to trusted server endpoints in the rare instance that server needs to be able to perform some background job (like summarisation!) and save the data to the DB. 

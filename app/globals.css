@@ -153,10 +153,18 @@ details {
 details summary {
   cursor: pointer;
   margin-bottom: 0.5rem;
+  display: list-item;
+  list-style-position: outside;
+  margin-left: 1rem;
+  padding-left: 0.5rem;
 }
 
 details[open] summary {
   margin-bottom: 0.75rem;
+}
+
+details[open] > *:not(summary) {
+  margin-left: 1.5rem;
 }
 
 a {
