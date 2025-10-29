@@ -6,9 +6,7 @@ title: "Why I believe I should make the Conversational Journal"
 
 ## Belief #1: If you could fit *absolutely everything* into a ChatGPT prompt, that would be a super power. We need to find better ways of fitting context into LLMs.
 
-I seem to share this belief with Sam, who said this last week (watch the clip):
-
-https://x.com/Overlap_Tech/status/1922696722956120408
+I seem to share this belief with Sam, who said this last week - [watch the clip](https://x.com/Overlap_Tech/status/1922696722956120408).
 
 ### **Models have become so much smarter**
 
@@ -110,46 +108,49 @@ The easy lift here is to open source the part of your code that handles sensitiv
 
 There is a more interesting approach, that keeps more of your code proprietary, that I couldn’t quite get all the way with. 
 
-- Technical explanation of where I got with that approach
-    
-    The approach is to transparently tag data as sensitive, and have the infrastructure to prove which endpoints that sensitive data is being sent to. Then one would only open source that, and not the entire front end. 
-    
-    While it’s quite possible to securely inspect all outgoing requests (as you can see below), we can’t robustly evaluate whether any contain sensitive data. A string `search()` doesn’t cut it, and data flow tools (static or dynamic) don’t get us all the way. This is because sensitive data can be transformed (or encrypted), `eval` exists, data can be washed through the DOM. 
-    
-    Inspecting and locking down outgoing requests looks would look like this:
-    
-    - Use a javascript `proxy` , to intercept all XHR or fetch requests.
-    - Disallow modification of the proxied functions
-    
-    For example:
-    
-    ```jsx
-    (function () {
-      const realFetch = window.fetch.bind(window);
-    
-      function screenRequest(input, init) {
-        // Extract headers
-        const headers = init?.headers || {};
-    
-        // Extract body
-        const body = init?.body;
-    
-        // TODO: The hard part - actually screen for data
-      }
-    
-      async function secureFetch(input, init = {}) {
-        screenRequest(input, init);
-        return realFetch(input, init);
-      }
-    
-      Object.defineProperty(window, 'fetch', {
-        value: Object.freeze(secureFetch),
-        writable: false,
-        configurable: false,
-        enumerable: true,
-      });
-    })();
-    ```
+<details>
+<summary>Technical explanation of where I got with that approach</summary>
+
+The approach is to transparently tag data as sensitive, and have the infrastructure to prove which endpoints that sensitive data is being sent to. Then one would only open source that, and not the entire front end.
+
+While it's quite possible to securely inspect all outgoing requests (as you can see below), we can't robustly evaluate whether any contain sensitive data. A string `search()` doesn't cut it, and data flow tools (static or dynamic) don't get us all the way. This is because sensitive data can be transformed (or encrypted), `eval` exists, data can be washed through the DOM.
+
+Inspecting and locking down outgoing requests looks would look like this:
+
+- Use a javascript `proxy` , to intercept all XHR or fetch requests.
+- Disallow modification of the proxied functions
+
+For example:
+
+```jsx
+(function () {
+  const realFetch = window.fetch.bind(window);
+
+  function screenRequest(input, init) {
+    // Extract headers
+    const headers = init?.headers || {};
+
+    // Extract body
+    const body = init?.body;
+
+    // TODO: The hard part - actually screen for data
+  }
+
+  async function secureFetch(input, init = {}) {
+    screenRequest(input, init);
+    return realFetch(input, init);
+  }
+
+  Object.defineProperty(window, 'fetch', {
+    value: Object.freeze(secureFetch),
+    writable: false,
+    configurable: false,
+    enumerable: true,
+  });
+})();
+```
+
+</details>
     
 
 ### **The endpoints receiving sensitive data must prove they aren’t suspicious**
