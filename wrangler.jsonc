@@ -27,5 +27,8 @@
   },
   "observability": {
     "enabled": true
-  }
+  },
+  "routes": [
+    { "pattern": "arjun.md", "custom_domain": true }
+  ]
 }
