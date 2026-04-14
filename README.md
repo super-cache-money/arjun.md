@@ -1,35 +1,44 @@
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fleerob%2Fnext-mdx-blog)
+# arjun.md
 
-# next-mdx-blog
-
-This is a blog template built with:
+Personal site built with:
 
 - **Framework**: [Next.js](https://nextjs.org)
-- **Deployment**: [Vercel](https://vercel.com)
+- **Deployment**: [Cloudflare Workers](https://workers.cloudflare.com) via [OpenNext](https://opennext.js.org)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com)
-- **Analytics**: [Vercel Analytics](https://vercel.com/analytics)
-- **Database** (Optional): [Postgres](https://vercel.com/postgres)
+- **Content**: MDX
+- **Subscriptions**: [Notion](https://notion.so)
 
 ## Running Locally
 
-This application requires Node.js v18.17+.
-
 ```bash
-git clone https://github.com/leerob/next-mdx-blog.git
-cd next-mdx-blog
 pnpm install
 pnpm dev
 ```
 
-## Database (Optional)
+## Preview (Cloudflare runtime)
 
-Create a `.env.local` file with your `POSTGRES_URL` environment variable to store redirects.
+```bash
+pnpm preview
+```
 
-```sql
-CREATE TABLE redirects (
-  id SERIAL PRIMARY KEY,
-  source VARCHAR(255) NOT NULL,
-  destination VARCHAR(255) NOT NULL,
-  permanent BOOLEAN NOT NULL
-);
+## Deploy
+
+```bash
+pnpm deploy
+```
+
+## Environment Variables
+
+Create a `.env.local` file:
+
+```
+NOTION_API_KEY=...
+NOTION_DATABASE_ID=...
+```
+
+For production, set these as Worker secrets:
+
+```bash
+wrangler secret put NOTION_API_KEY
+wrangler secret put NOTION_DATABASE_ID
 ```
