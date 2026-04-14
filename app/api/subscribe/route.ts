@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
       }
       console.error('Notion API error:', body);
       return NextResponse.json(
-        { error: 'Failed to subscribe. Please try again.' },
+        { error: 'Failed to subscribe. Please try again.', debug: body },
         { status: 500 }
       );
     }
