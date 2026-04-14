@@ -1,9 +1,4 @@
-import { Client } from '@notionhq/client';
 import { NextRequest, NextResponse } from 'next/server';
-
-const notion = new Client({
-  auth: process.env.NOTION_API_KEY,
-});
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,46 +11,50 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const apiKey = process.env.NOTION_API_KEY;
     const databaseId = process.env.NOTION_DATABASE_ID;
 
-    if (!databaseId) {
+    if (!databaseId || !apiKey) {
       return NextResponse.json(
         { error: 'Server configuration error' },
         { status: 500 }
       );
     }
 
-    await notion.pages.create({
-      parent: {
-        database_id: databaseId,
+    const res = await fetch('https://api.notion.com/v1/pages', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        'Notion-Version': '2022-06-28',
       },
-      properties: {
-        'Email address': {
-          email: email,
+      body: JSON.stringify({
+        parent: { database_id: databaseId },
+        properties: {
+          'Email address': { email },
         },
-      },
+      }),
     });
 
-    console.log('New subscriber:', email);
-
-    return NextResponse.json(
-      { message: 'Successfully subscribed!' },
-      { status: 200 }
-    );
-  } catch (error: unknown) {
-    console.error('Error adding subscriber:', error);
-
-    // Handle duplicate email error
-    if (error instanceof Error && 'body' in error) {
-      const notionError = error as { body?: string };
-      if (notionError.body && typeof notionError.body === 'string' && notionError.body.includes('already exists')) {
+    if (!res.ok) {
+      const body = await res.json() as { message?: string };
+      if (res.status === 409 || body.message?.includes('already exists')) {
         return NextResponse.json(
           { error: 'This email is already subscribed' },
           { status: 409 }
         );
       }
+      console.error('Notion API error:', body);
+      return NextResponse.json(
+        { error: 'Failed to subscribe. Please try again.' },
+        { status: 500 }
+      );
     }
 
+    console.log('New subscriber:', email);
+    return NextResponse.json({ message: 'Successfully subscribed!' }, { status: 200 });
+  } catch (error) {
+    console.error('Error adding subscriber:', error);
     return NextResponse.json(
       { error: 'Failed to subscribe. Please try again.' },
       { status: 500 }
